@@ -3,31 +3,40 @@
  Created:	5/24/2017 11:59:12 PM
  Author:	Matheus
 */
+#include <FuzzyRule.h>
+#include <FuzzyComposition.h>
+#include <Fuzzy.h>
+#include <FuzzyRuleConsequent.h>
+#include <FuzzyOutput.h>
+#include <FuzzyInput.h>
+#include <FuzzyIO.h>
+#include <FuzzySet.h>
+#include <FuzzyRuleAntecedent.h>
 
 #define MAX_VEL 255 //Velocidade Maxima
 #define MIN_VEL 10  //Velocidade Minima
 
-const int MOTOR_1_A = 11;
-const int MOTOR_1_B = 10;
-const int MOTOR_2_A = 6;
-const int MOTOR_2_B = 5;
+const int MOTOR_1_A      = 11;
+const int MOTOR_1_B      = 10;
+const int MOTOR_2_A      = 6;
+const int MOTOR_2_B      = 5;
 const int MOTOR_1_Enable = 4;
 const int MOTOR_2_Enable = 3;
-const int Trigger = 13;
-const int Echo = 12;
+const int Trigger        = 13;
+const int Echo           = 12;
 
-void ir_para_tras(int vel);
-void ir_para_frente(int vel);
-void ir_para_esquerda(int vel);
-void ir_para_direita(int vel);
-void curva_direita(int vel);
-void curva_esquerda(int vel);
+void  movTras      (int vel);
+void  movFrente    (int vel);
+void  movEsquerda  (int vel);
+void  movDireita   (int vel);
+void  curvaDireita (int vel);
+void  curvaEsquerda(int vel);
 
-float ler_sensor();
-void programa_1();
-void programa_2();
+float lerSensor    ();
+void  programa_1   ();
+void  programa_2   ();
 
-// the setup function runs once when you press reset or power the board
+// a função de configuração é executada uma vez quando você pressiona reset ou liga a placa
 void setup()
 {
 	//Pinos dos Motores
@@ -44,12 +53,13 @@ void setup()
 	digitalWrite(MOTOR_2_Enable, HIGH);
 }
 
-// the loop function runs over and over again until power down or reset
-void loop()
+// a função de loop é executada repetidamente até que a alimentação seja desligada ou reinicializada
+void  loop()
 {
 
 }
-void ir_para_tras(int vel)
+//Movimentações
+void  movTras      (int vel)
 {
 	digitalWrite(MOTOR_1_B, LOW);
 	digitalWrite(MOTOR_2_B, LOW);
@@ -57,7 +67,7 @@ void ir_para_tras(int vel)
 	analogWrite(MOTOR_1_B, vel);
 	analogWrite(MOTOR_2_B, vel);
 }
-void ir_para_frente(int vel)
+void  movFrente    (int vel)
 {
 	digitalWrite(MOTOR_1_A, LOW);
 	digitalWrite(MOTOR_2_A, LOW);
@@ -65,7 +75,7 @@ void ir_para_frente(int vel)
 	analogWrite(MOTOR_1_A, vel);
 	analogWrite(MOTOR_2_A, vel);
 }
-void ir_para_direita(int vel)
+void  movDireita   (int vel)
 {
 	digitalWrite(MOTOR_1_A, LOW);
 	digitalWrite(MOTOR_2_A, LOW);
@@ -73,7 +83,7 @@ void ir_para_direita(int vel)
 	analogWrite(MOTOR_1_A, 0);
 	analogWrite(MOTOR_2_A, vel);
 }
-void ir_para_esquerda(int vel)
+void  movEsquerda  (int vel)
 {
 	digitalWrite(MOTOR_1_A, LOW);
 	digitalWrite(MOTOR_2_A, LOW);
@@ -81,7 +91,8 @@ void ir_para_esquerda(int vel)
 	analogWrite(MOTOR_1_A, vel);
 	analogWrite(MOTOR_2_A, 0);
 }
-void curva_esquerda(int vel)
+//Suavização de Movimentos Curvos
+void  curvaEsquerda(int vel)
 {
 	digitalWrite(MOTOR_1_A, LOW);
 	digitalWrite(MOTOR_2_A, LOW);
@@ -89,7 +100,7 @@ void curva_esquerda(int vel)
 	analogWrite(MOTOR_1_A, MIN_VEL);
 	analogWrite(MOTOR_2_A, vel);
 }
-void curva_direita(int vel)
+void  curvaDireita (int vel)
 {
 	digitalWrite(MOTOR_1_A, LOW);
 	digitalWrite(MOTOR_2_A, LOW);
@@ -97,28 +108,23 @@ void curva_direita(int vel)
 	analogWrite(MOTOR_1_A, vel);
 	analogWrite(MOTOR_2_A, MIN_VEL);
 }
-float ler_sensor()
+
+float lerSensor    ()
 {
 	float vlr_lido;
 	digitalWrite(Trigger, HIGH);
 	delayMicroseconds(50);
 	digitalWrite(Trigger, LOW);
-	vlr_lido = pulseIn(Echo, HIGH);   //Tempo do SInal
+	vlr_lido = pulseIn(Echo, HIGH);   //Tempo do Sinal
 
 	return (vlr_lido / 2 / 29);       //Em Cm.
 }
-void programa_1()
+
+void  programa_1   ()
 {
-	ir_para_frente(MAX_VEL);
-	delay(1000);
-	ir_para_tras(MAX_VEL);
-	delay(1000);
-	ir_para_esquerda(MAX_VEL);
-	delay(500);
-	ir_para_direita(MAX_VEL);
-	delay(500);
+
 }
-void programa_2()
+void  programa_2   ()
 {
 
 }
