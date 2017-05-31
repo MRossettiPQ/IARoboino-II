@@ -32,20 +32,20 @@ const int Echo_1 = 12;
 const int Trigger_2 = 3;
 const int Echo_2 = 2;
 
-void  movTras(int vel);
-void  movFrente(int vel);
-void  movEsquerda(int vel);
-void  movDireita(int vel);
-void  curvaDireita(int vel);
+void  movTras      (int vel);
+void  movFrente    (int vel);
+void  movEsquerda  (int vel);
+void  movDireita   (int vel);
+void  curvaDireita (int vel);
 void  curvaEsquerda(int vel);
 
-float lerSensor_1();
-float lerSensor_2();
-void  programa_1();
-void  programa_2();
+float lerSensor_1  ();
+float lerSensor_2  ();
+void  programa_1   ();
+void  programa_2   ();
 
 //A função de configuração é executada uma vez quando você pressiona reset ou liga a placa
-void setup()
+void setup         ()
 {
 	Serial.begin(9600);
 	//Modos dos Pinos dos Motores
@@ -120,12 +120,12 @@ void setup()
 }
 
 //A função de loop é executada repetidamente até que a alimentação seja desligada ou reinicializada
-void  loop()
+void  loop         ()
 {
 
 }
 //Movimentações
-void  movTras(int vel)
+void  movTras      (int vel)
 {
 	digitalWrite(MOTOR_1_B, LOW);
 	digitalWrite(MOTOR_2_B, LOW);
@@ -133,7 +133,7 @@ void  movTras(int vel)
 	analogWrite(MOTOR_1_B, vel);
 	analogWrite(MOTOR_2_B, vel);
 }
-void  movFrente(int vel)
+void  movFrente    (int vel)
 {
 	digitalWrite(MOTOR_1_A, LOW);
 	digitalWrite(MOTOR_2_A, LOW);
@@ -141,7 +141,7 @@ void  movFrente(int vel)
 	analogWrite(MOTOR_1_A, vel);
 	analogWrite(MOTOR_2_A, vel);
 }
-void  movDireita(int vel)
+void  movDireita   (int vel)
 {
 	digitalWrite(MOTOR_1_A, LOW);
 	digitalWrite(MOTOR_2_A, LOW);
@@ -149,7 +149,7 @@ void  movDireita(int vel)
 	analogWrite(MOTOR_1_A, 0);
 	analogWrite(MOTOR_2_A, vel);
 }
-void  movEsquerda(int vel)
+void  movEsquerda  (int vel)
 {
 	digitalWrite(MOTOR_1_A, LOW);
 	digitalWrite(MOTOR_2_A, LOW);
@@ -166,7 +166,7 @@ void  curvaEsquerda(int vel)
 	analogWrite(MOTOR_1_A, MIN_VEL);
 	analogWrite(MOTOR_2_A, vel);
 }
-void  curvaDireita(int vel)
+void  curvaDireita (int vel)
 {
 	digitalWrite(MOTOR_1_A, LOW);
 	digitalWrite(MOTOR_2_A, LOW);
@@ -175,7 +175,7 @@ void  curvaDireita(int vel)
 	analogWrite(MOTOR_2_A, MIN_VEL);
 }
 //Leitura dos Sensores
-float lerSensor_1()
+float lerSensor_1  ()
 {
 	float vlr_lido;
 	digitalWrite(Trigger_1, HIGH);
@@ -185,7 +185,7 @@ float lerSensor_1()
 
 	return (vlr_lido / 2 / 29);														//Em Cm.
 }
-float lerSensor_2()
+float lerSensor_2  ()
 {
 	float vlr_lido;
 	digitalWrite(Trigger_2, HIGH);
@@ -196,7 +196,7 @@ float lerSensor_2()
 	return (vlr_lido / 2 / 29);       //Em Cm.
 }
 //Implementação eFLL
-void  programa_1()
+void  programa_1   ()
 {
 	float distanciaAtual = getDistanceFromSonar();
 
@@ -211,7 +211,7 @@ void  programa_1()
 	delay(100);
 }
 //Implementação MLP
-void  programa_2()
+void  programa_2   ()
 {
 
 }
