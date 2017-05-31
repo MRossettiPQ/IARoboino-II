@@ -72,49 +72,49 @@ void setup()
 	FuzzyInput* distancia = new FuzzyInput(1);												// Como parametro seu ID
 																							// Criando os FuzzySet que compoem o FuzzyInput distancia
 	FuzzySet* proximo = new FuzzySet(0, 20, 20, 40);										// Distancia pequena
-	distancia->addFuzzySet(proximo);													// Adicionando o FuzzySet small em distance
+		distancia->addFuzzySet(proximo);													// Adicionando o FuzzySet small em distance
 	FuzzySet* seguro = new FuzzySet(30, 50, 50, 70);										// Distancia segura
-	distancia->addFuzzySet(seguro);														// Adicionando o FuzzySet safe em distance
+		distancia->addFuzzySet(seguro);														// Adicionando o FuzzySet safe em distance
 	FuzzySet* distante = new FuzzySet(60, 80, 80, 80);										// Distancia grande
-	distancia->addFuzzySet(distante);													// Adicionando o FuzzySet big em distance
+		distancia->addFuzzySet(distante);													// Adicionando o FuzzySet big em distance
 	fuzzy->addFuzzyInput(distancia);														// Adicionando o FuzzyInput no objeto Fuzzy
 
 																							// Passo 3 - Criando o FuzzyOutput velocidade
 	FuzzyOutput* velocidade = new FuzzyOutput(1);											// Como parametro seu ID
 																							// Criando os FuzzySet que compoem o FuzzyOutput velocidade
 	FuzzySet* baixaVelocidade = new FuzzySet(0, 10, 10, 20);								// Velocidade lenta
-	velocidade->addFuzzySet(baixaVelocidade);											// Adicionando o FuzzySet slow em velocity
+		velocidade->addFuzzySet(baixaVelocidade);											// Adicionando o FuzzySet slow em velocity
 	FuzzySet* mediaVelocidade = new FuzzySet(10, 20, 30, 40);								// Velocidade normal
-	velocidade->addFuzzySet(mediaVelocidade);											// Adicionando o FuzzySet average em velocity
+		velocidade->addFuzzySet(mediaVelocidade);											// Adicionando o FuzzySet average em velocity
 	FuzzySet* altaVelocidade = new FuzzySet(30, 40, 40, 50);								// Velocidade alta
-	velocidade->addFuzzySet(altaVelocidade);											// Adicionando o FuzzySet fast em velocity
+		velocidade->addFuzzySet(altaVelocidade);											// Adicionando o FuzzySet fast em velocity
 	fuzzy->addFuzzyOutput(velocidade);														// Adicionando o FuzzyOutput no objeto Fuzzy
 
 																							//Passo 4 - Montando as regras Fuzzy
 																							// FuzzyRule "SE distancia = pequena ENTAO velocidade = lenta"
 	FuzzyRuleAntecedent* ifDistanciaPequena = new FuzzyRuleAntecedent();					// Instanciando um Antecedente para a expresso
-	ifDistanciaPequena->joinSingle(proximo);											// Adicionando o FuzzySet correspondente ao objeto Antecedente
+		ifDistanciaPequena->joinSingle(proximo);											// Adicionando o FuzzySet correspondente ao objeto Antecedente
 	FuzzyRuleConsequent* thenVelocidadeBaixa = new FuzzyRuleConsequent();					// Instancinado um Consequente para a expressao
-	thenVelocidadeBaixa->addOutput(baixaVelocidade);									// Adicionando o FuzzySet correspondente ao objeto Consequente
-																						// Instanciando um objeto FuzzyRule
+		thenVelocidadeBaixa->addOutput(baixaVelocidade);									// Adicionando o FuzzySet correspondente ao objeto Consequente
+																							// Instanciando um objeto FuzzyRule
 	FuzzyRule* regraFuzzy01 = new FuzzyRule(1, ifDistanciaPequena, thenVelocidadeBaixa);	// Passando o Antecedente e o Consequente da expressao
 	fuzzy->addFuzzyRule(regraFuzzy01);														// Adicionando o FuzzyRule ao objeto Fuzzy
 
 																							// FuzzyRule "SE distancia = segura ENTAO velocidade = normal"
-	FuzzyRuleAntecedent* ifDistanciaSegura = new FuzzyRuleAntecedent();					// Instanciando um Antecedente para a expresso
-	ifDistanciaSegura->joinSingle(seguro);												// Adicionando o FuzzySet correspondente ao objeto Antecedente
+	FuzzyRuleAntecedent* ifDistanciaSegura = new FuzzyRuleAntecedent();						// Instanciando um Antecedente para a expresso
+		ifDistanciaSegura->joinSingle(seguro);												// Adicionando o FuzzySet correspondente ao objeto Antecedente
 	FuzzyRuleConsequent* thenVelocidadeMedia = new FuzzyRuleConsequent();					// Instancinado um Consequente para a expressao
-	thenVelocidadeMedia->addOutput(mediaVelocidade);									// Adicionando o FuzzySet correspondente ao objeto Consequente
-																						// Instanciando um objeto FuzzyRule
+		thenVelocidadeMedia->addOutput(mediaVelocidade);									// Adicionando o FuzzySet correspondente ao objeto Consequente
+																							// Instanciando um objeto FuzzyRule
 	FuzzyRule* regraFuzzy02 = new FuzzyRule(2, ifDistanciaSegura, thenVelocidadeMedia); 	// Passando o Antecedente e o Consequente da expressao
 	fuzzy->addFuzzyRule(regraFuzzy02);														// Adicionando o FuzzyRule ao objeto Fuzzy
 
 																							// FuzzyRule "SE distancia = grande ENTAO velocidade = alta"
-	FuzzyRuleAntecedent* ifDistanciaLonga = new FuzzyRuleAntecedent();					// Instanciando um Antecedente para a expresso
-	ifDistanciaLonga->joinSingle(distante);												// Adicionando o FuzzySet correspondente ao objeto Antecedente
+	FuzzyRuleAntecedent* ifDistanciaLonga = new FuzzyRuleAntecedent();						// Instanciando um Antecedente para a expresso
+		ifDistanciaLonga->joinSingle(distante);												// Adicionando o FuzzySet correspondente ao objeto Antecedente
 	FuzzyRuleConsequent* thenVelocidadeRapida = new FuzzyRuleConsequent();					// Instancinado um Consequente para a expressao
-	thenVelocidadeRapida->addOutput(altaVelocidade);									// Adicionando o FuzzySet correspondente ao objeto Consequente
-																						// Instanciando um objeto FuzzyRule
+		thenVelocidadeRapida->addOutput(altaVelocidade);									// Adicionando o FuzzySet correspondente ao objeto Consequente
+																							// Instanciando um objeto FuzzyRule
 	FuzzyRule* regraFuzzy03 = new FuzzyRule(3, ifDistanciaLonga, thenVelocidadeRapida);		// Passando o Antecedente e o Consequente da expressao
 	fuzzy->addFuzzyRule(regraFuzzy03);														// Adicionando o FuzzyRule ao objeto Fuzzy
 }
