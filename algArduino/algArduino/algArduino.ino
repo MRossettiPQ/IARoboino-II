@@ -34,7 +34,7 @@ const int Echo_2 = 2;
 
 
 
-//Movimentações
+//Movimentaï¿½ï¿½es
 void  movTras()
 {
 	digitalWrite(MOTOR_1_B, LOW);
@@ -67,7 +67,7 @@ void  movEsquerda()
 	analogWrite(MOTOR_1_A, MAX_VEL);
 	analogWrite(MOTOR_2_A, 0);
 }
-//Suavização de Movimentos Curvos
+//Suavizaï¿½ï¿½o de Movimentos Curvos
 void  curvaEsquerda()
 {
 	digitalWrite(MOTOR_1_A, LOW);
@@ -105,18 +105,62 @@ float lerSensor_2()
 
 	return (vlr_lido / 2 / 29.1);														//Em Cm.
 }
-//Implementação eFLL
+//Implementaï¿½ï¿½o eFLL
 void  programa_1()
 {
+int Dist1, Dist2;
 
+  Dist1 = lerSensor_1();
+  Dist2 = lerSensor_2();
+
+  //Fuzzyfica e Defuzzyfica Sensor 1  
+  fuzzy->setInput(1, Dist1);
+  fuzzy->fuzzify();
+  float output1 = fuzzy->defuzzify(1);
+
+  //Fuzzyfica e Defuzzyfica Sensor 2 
+  fuzzy->setInput(2, Dist2);
+  fuzzy->fuzzify();
+  float output2 = fuzzy->defuzzify(2);
+
+
+  Serial.print("Saida Defuzzy 1: ");
+  Serial.print(output1);
+  Serial.print("  Saida Defuzzy 2: ");
+  Serial.println(output2);
+  
+ if (output1 == output2){
+       movFrente();
+  }else if(output1 > output2){
+       movTras();
+       delay(1000);
+       movDireita();
+  }else if(output1 < output2){
+       movTras();
+       delay(1000);
+       movEsquerda();
+  }else if(output2 > output1){
+       movTras();
+       delay(1000);
+       movEsquerda();
+  }else if(output2 < output1){
+       movTras();
+       delay(1000);
+       movDireita();
+  }
+
+  // wait 100 milli seconds before looping again
+  delay(100);
 }
-//Implementação MLP
+
+
+//Implementaï¿½ï¿½o MLP
 void  programa_2()
 {
 
 }
 
-//A função de configuração é executada uma vez quando você pressiona reset ou liga a placa
+//A funï¿½ï¿½o de configuraï¿½ï¿½o ï¿½ executada uma vez quando vocï¿½ pressiona reset ou liga a placa
 void setup         ()
 {
 	Serial.begin(9600);
@@ -151,7 +195,7 @@ void setup         ()
 
 
 
-	//UTILIZAÇÃO BIBLIOTECA eFLL
+	//UTILIZAï¿½ï¿½O BIBLIOTECA eFLL
 										//Passo 2 - Criando o FuzzyInput distancia
 	FuzzyInput* distancia = new FuzzyInput(1);												// Como parametro seu ID
 																							// Criando os FuzzySet que compoem o FuzzyInput distancia
@@ -261,31 +305,8 @@ void setup         ()
 	//---------------------
 }
 
-//A função de loop é executada repetidamente até que a alimentação seja desligada ou reinicializada
+//A funï¿½ï¿½o de loop ï¿½ executada repetidamente atï¿½ que a alimentaï¿½ï¿½o seja desligada ou reinicializada
 void loop() 
 {
-	int Dist1, Dist2;
-
-	Dist1 = lerSensor_1();
-	Dist2 = lerSensor_2();
-
-	//Fuzzyfica e Defuzzyfica Sensor 1  
-	fuzzy->setInput(1, Dist1);
-	fuzzy->fuzzify();
-	float output1 = fuzzy->defuzzify(1);
-
-	//Fuzzyfica e Defuzzyfica Sensor 2 
-	fuzzy->setInput(2, Dist2);
-	fuzzy->fuzzify();
-	float output2 = fuzzy->defuzzify(2);
-
-
-	Serial.print("Saida Defuzzy 1: ");
-	Serial.print(output1);
-	Serial.print("  Saida Defuzzy 2: ");
-	Serial.println(output2);
-
-
-	// wait 100 milli seconds before looping again
-	delay(100);
+	programa_1();
 }
