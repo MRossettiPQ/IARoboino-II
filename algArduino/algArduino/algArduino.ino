@@ -34,6 +34,11 @@ const int Trigger_1 = 13;
 const int Echo_1 = 12;
 const int Trigger_2 = 3;
 const int Echo_2 = 2;
+//PINAGEM SELETOR
+const int selectPin_1 = 1;
+const int selectPin_2 = 2;
+
+int selectState_1 = 0, selectState_2 = 0;
 
 
 //Movimentações
@@ -116,19 +121,19 @@ void  programa_1					()
 	Dist2 = lerSensor_2();
 
 	//Fuzzyfica e Defuzzyfica Sensor 1  
-	 fuzzy->setInput(1, Dist1);
-	fuzzy->fuzzify();
+	fuzzy->setInput(1, Dist1);
+	fuzzy->fuzzify ();
 	float output1 = fuzzy->defuzzify(1);
 
 	//Fuzzyfica e Defuzzyfica Sensor 2 
 	fuzzy->setInput(2, Dist2);
-	fuzzy->fuzzify();
+	fuzzy->fuzzify ();
 	float output2 = fuzzy->defuzzify(2);
 
 
 	Serial.print("Saida Defuzzy 1: ");
 	Serial.print(output1);
-	Serial.print("  Saida Defuzzy 2: ");
+	Serial.print("Saida Defuzzy 2: ");
 	Serial.println(output2);
 	
 	if (output1 == output2)
@@ -196,6 +201,9 @@ void setup							()
 	pinMode(Echo_1, INPUT);
 	pinMode(Trigger_2, OUTPUT);
 	pinMode(Echo_2, INPUT);
+	//Seletores
+	pinMode(selectPin_1, INPUT);
+	pinMode(selectPin_2, INPUT);
 	//Ligar Motores
 	digitalWrite(MOTOR_1_Enable, HIGH);
 	digitalWrite(MOTOR_2_Enable, HIGH);
@@ -315,7 +323,21 @@ void setup							()
 //A função de loop é executada repetidamente até que a alimentação seja desligada ou reinicializada
 void loop							() 
 {
-	//CRIAR SWITCH PARA SELECIONAR QUAL PROGRAMA RODAR
-	programa_1();
-	programa_2();
+	selectState_1 = digitalRead(selectPin_1);
+	selectState_2 = digitalRead(selectPin_2);
+
+	//CRIAR SELETOR PARA QUAL PROGRAMA RODAR
+	
+	if(selectState_1 == HIGH)
+	{
+		programa_1();
+	}
+	else if(selectState_2 == HIGH)
+	{
+		programa_2();
+	}
+	else
+	{
+		Serial.print("NÃO QUERO ANDAR NÃO");
+	}
 }
