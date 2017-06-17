@@ -3,6 +3,9 @@ Name:		algArduino.ino
 Created:	5/24/2017 11:59:12 PM
 Author:	Matheus Rossetti & Rian Turibio
 */
+
+#include <EEPROM.h>
+#include "MLP.c"
 #include <FuzzyRule.h>
 #include <FuzzyComposition.h>
 #include <Fuzzy.h>
@@ -33,9 +36,8 @@ const int Trigger_2 = 3;
 const int Echo_2 = 2;
 
 
-
 //Movimentações
-void  movTras()
+void  movTras						()
 {
 	digitalWrite(MOTOR_1_B, LOW);
 	digitalWrite(MOTOR_2_B, LOW);
@@ -43,7 +45,7 @@ void  movTras()
 	analogWrite(MOTOR_1_B, MAX_VEL);
 	analogWrite(MOTOR_2_B, MAX_VEL);
 }
-void  movFrente()
+void  movFrente						()
 {
 	digitalWrite(MOTOR_1_A, LOW);
 	digitalWrite(MOTOR_2_A, LOW);
@@ -51,7 +53,7 @@ void  movFrente()
 	analogWrite(MOTOR_1_A, MAX_VEL);
 	analogWrite(MOTOR_2_A, MAX_VEL);
 }
-void  movDireita()
+void  movDireita					()
 {
 	digitalWrite(MOTOR_1_A, LOW);
 	digitalWrite(MOTOR_2_A, LOW);
@@ -59,7 +61,7 @@ void  movDireita()
 	analogWrite(MOTOR_1_A, 0);
 	analogWrite(MOTOR_2_A, MAX_VEL);
 }
-void  movEsquerda()
+void  movEsquerda					()
 {
 	digitalWrite(MOTOR_1_A, LOW);
 	digitalWrite(MOTOR_2_A, LOW);
@@ -68,7 +70,7 @@ void  movEsquerda()
 	analogWrite(MOTOR_2_A, 0);
 }
 //Suavização de Movimentos Curvos
-void  curvaEsquerda()
+void  curvaEsquerda					()
 {
 	digitalWrite(MOTOR_1_A, LOW);
 	digitalWrite(MOTOR_2_A, LOW);
@@ -76,7 +78,7 @@ void  curvaEsquerda()
 	analogWrite(MOTOR_1_A, MIN_VEL);
 	analogWrite(MOTOR_2_A, MAX_VEL);
 }
-void  curvaDireita()
+void  curvaDireita					()
 {
 	digitalWrite(MOTOR_1_A, LOW);
 	digitalWrite(MOTOR_2_A, LOW);
@@ -85,7 +87,7 @@ void  curvaDireita()
 	analogWrite(MOTOR_2_A, MIN_VEL);
 }
 //Leitura dos Sensores
-float lerSensor_1()
+float lerSensor_1					()
 {
 	float vlr_lido;																			//Cria Variavel para o valor lido pelo sensor
 	digitalWrite(Trigger_1, HIGH);															
@@ -95,7 +97,7 @@ float lerSensor_1()
 
 	return (vlr_lido / 2 / 29.1);															//Em Cm.
 }
-float lerSensor_2()
+float lerSensor_2					()
 {
 	float vlr_lido;																			//Cria Variavel para o valor lido pelo sensor
 	digitalWrite(Trigger_2, HIGH);															
@@ -106,7 +108,7 @@ float lerSensor_2()
 	return (vlr_lido / 2 / 29.1);															//Em Cm.
 }
 //Implementação eFLL
-void  programa_1()
+void  programa_1					()
 {
 	int Dist1, Dist2;
 
@@ -161,16 +163,13 @@ void  programa_1()
 	// wait 100 milli seconds before looping again
 	delay(100);
 }
-
-
 //Implementação MLP
-void  programa_2()
+void  programa_2					()
 {
-
+	callMLP(lerSensor_1(), lerSensor_2());
 }
-
 //A funçãoo de configuraçãoo é executada uma vez quando você pressiona reset ou liga a placa
-void setup         ()
+void setup							()
 {
 	Serial.begin(9600);
 	void  movTras();
@@ -313,9 +312,10 @@ void setup         ()
 	FuzzyRule* fuzzyRule09 = new FuzzyRule(9, ifLongeD_LongeE, thenVReto2);					// Passando o Antecedente e o Consequente da expressao
 		fuzzy->addFuzzyRule(fuzzyRule09);													// Adicionando o FuzzyRule ao objeto Fuzzy
 }
-
 //A função de loop é executada repetidamente até que a alimentação seja desligada ou reinicializada
-void loop() 
+void loop							() 
 {
+	//CRIAR SWITCH PARA SELECIONAR QUAL PROGRAMA RODAR
 	programa_1();
+	programa_2();
 }
