@@ -23,20 +23,21 @@ Author:	Matheus Rossetti & Rian Turibio
 Fuzzy* fuzzy = new Fuzzy();
 
 //PINAGEM MOTORES
-const int MOTOR_1_A = 11;
-const int MOTOR_1_B = 10;
-const int MOTOR_2_A = 9;
-const int MOTOR_2_B = 6;
-const int MOTOR_1_Enable = 5;
-const int MOTOR_2_Enable = 4;
-//PINAGEM SENSORES
-const int Trigger_1 = 13;
-const int Echo_1 = 12;
-const int Trigger_2 = 3;
-const int Echo_2 = 2;
+const int MOTOR_1_A = 11;																	//Polo do motor 1
+const int MOTOR_1_B = 10;																	//Polo do motor 1
+const int MOTOR_2_A = 9;																	//Polo do motor 2
+const int MOTOR_2_B = 6;																	//Polo do motor 2
+const int MOTOR_1_Enable = 5;																//Ativação do motor 1
+const int MOTOR_2_Enable = 4;																//Ativação do motor 2
+//PINAGEM SENSORES			
+const int Trigger_1 = 13;																	//Sinal sensor 1
+const int Echo_1 = 12;																		//Sinal sensor 1
+const int Trigger_2 = 3;																	//Sinal sensor 2
+const int Echo_2 = 2;																		//Sinal sensor 2
 //PINAGEM SELETOR
-const int selectPin_1 = 1;
-const int selectPin_2 = 2;
+const int selectPin_1 = 0;																	//Opção 1 seletor 
+const int selectPin_2 = 1;																	//Opção 2 seletor 
+
 
 int selectState_1 = 0, selectState_2 = 0;
 
@@ -323,18 +324,19 @@ void setup							()
 //A função de loop é executada repetidamente até que a alimentação seja desligada ou reinicializada
 void loop							() 
 {
-	selectState_1 = digitalRead(selectPin_1);
-	selectState_2 = digitalRead(selectPin_2);
+	selectState_1 = digitalRead(selectPin_1);												//Leitura estado pino seletor 1
+	selectState_2 = digitalRead(selectPin_2);												//Leitura estado pino seletor 2
 
-	//CRIAR SELETOR PARA QUAL PROGRAMA RODAR
-	
-	if(selectState_1 == HIGH)
+	// Menu de seleção do programa de IA a ser rodado
+	if(selectState_1 == HIGH)																//Verificação do estado do pino seletor 1	
 	{
-		programa_1();
+		programa_1();																		//Chamada do programa de Logica Fuzzy
+		selectState_1 = 0;
 	}
-	else if(selectState_2 == HIGH)
+	else if(selectState_2 == HIGH)															//Verificação do estado do pino seletor 2
 	{
-		programa_2();
+		programa_2();																		//Chamada do programa de MLP
+		selectState_2 = 0;
 	}
 	else
 	{
