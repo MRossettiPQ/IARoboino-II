@@ -23,10 +23,10 @@
 545		selectState_2 = digitalRead(selectPin_2);												//Leitura estado pino seletor 2
 546	
 547		// Menu de seleção do programa de IA a ser rodado
-548		if (selectState_1 == HIGH)																//Verificação do estado do pino seletor 1	
+548		if((selectState_1 == HIGH) &amp;&amp; (selectState_2 == LOW))									//Verificação do estado do pino seletor 1	
 549		{
 550			programa_1();																		//Chamada do programa de Logica Fuzzy
-551			selectState_1 = LOW;
+551		}
 </Source>
         <MessageVariables>
           <MessageVariable Name="millis()" Index="1" />

@@ -52,8 +52,8 @@ const int Echo_1 = 12;																		//Sinal sensor 1
 const int Trigger_2 = 3;																	//Sinal sensor 2
 const int Echo_2 = 2;																		//Sinal sensor 2
 //PINAGEM SELETOR
-const int selectPin_1 = 0;																	//Opção 1 seletor 
-const int selectPin_2 = 1;																	//Opção 2 seletor 
+const int selectPin_1 = 7;																	//Opção 1 seletor 
+const int selectPin_2 = 8;																	//Opção 2 seletor 
 //VARIAVEIS GLOBAIS MLP
 double	w_e_o[ENTRADAS + 1][NR_NEURON_O];
 double	w_o_s[NR_NEURON_O + 1][SAIDAS];
@@ -545,15 +545,13 @@ void loop							()
 	selectState_2 = digitalRead(selectPin_2);												//Leitura estado pino seletor 2
 
 	// Menu de seleção do programa de IA a ser rodado
-	if (selectState_1 == HIGH)																//Verificação do estado do pino seletor 1	
+	if((selectState_1 == HIGH) && (selectState_2 == LOW))									//Verificação do estado do pino seletor 1	
 	{
 		programa_1();																		//Chamada do programa de Logica Fuzzy
-		selectState_1 = LOW;
 	}
-	else if (selectState_2 == HIGH)															//Verificação do estado do pino seletor 2
+	else if ((selectState_1 == LOW) && (selectState_2 == HIGH))								//Verificação do estado do pino seletor 2
 	{
 		programa_2();																		//Chamada do programa de MLP
-		selectState_2 = LOW;
 	}
 	else
 	{
