@@ -3,6 +3,7 @@ Name:		algArduino.ino
 Created:	5/24/2017 11:59:12 PM
 Author:	Matheus Rossetti & Rian Turibio
 */
+//Includes
 #include <EEPROM.h>
 //FUZZY
 #include <FuzzyRule.h>
@@ -64,6 +65,7 @@ double	delta_oculta[NR_NEURON_O];
 //VARIAVEIS PINO SELETOR
 int selectState_1 = 0, selectState_2 = 0;
 
+//Funções Basicas
 //Movimentações
 void   movTras						()
 {
