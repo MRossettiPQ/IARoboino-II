@@ -197,34 +197,11 @@ void   programa_1					()
 //Implementação MLP
 void   programa_2					()
 {
-	int sentido = callMLP(lerSensor_1(), lerSensor_2());
-
-	if (sentido == 0)
-	{
-		movFrente();
-	}
-	else if (sentido == 1)
-	{
-		movTras();
-	}
-	else if (sentido == 2)
-	{
-		movEsquerda();
-	}
-	else
-	{
-		movDireita();
-	}
-}
-//Função principal
-int    callMLP						(float Sensor_1, float Sensor_2)
-{
-	int sentido;
 	//Entradas da Rna são binarias
 	double	entradas[ENTRADAS];
 
-	entradas[0] = Sensor_1;
-	entradas[1] = Sensor_2;
+	entradas[0] = lerSensor_1();
+	entradas[1] = lerSensor_2();
 
 	inicializa_sinapses();
 	treinar_RNA();
@@ -233,22 +210,20 @@ int    callMLP						(float Sensor_1, float Sensor_2)
 
 	if ((saida_s[0] == 1) && (saida_s[1] == 0) && (saida_s[2] == 1) && (saida_s[3] == 0))		//Frente
 	{
-		sentido = 0;
+		movFrente();
 	}
 	else if ((saida_s[0] == 0) && (saida_s[1] == 1) && (saida_s[2] == 0) && (saida_s[3] == 1))	//Tras
 	{
-		sentido = 1;
+		movTras();
 	}
 	else if ((saida_s[0] == 0) && (saida_s[1] == 0) && (saida_s[2] == 1) && (saida_s[3] == 0))	//Esquerda
 	{
-		sentido = 2;
+		movEsquerda();
 	}
 	else if ((saida_s[0] == 1) && (saida_s[1] == 0) && (saida_s[2] == 0) && (saida_s[3] == 0))	//Direita
 	{
-		sentido = 3;
+		movDireita();
 	}
-
-	return sentido;
 }
 //MLP
 void   inicializa_sinapses			()
