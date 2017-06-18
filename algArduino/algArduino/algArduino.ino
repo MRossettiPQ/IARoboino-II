@@ -2,7 +2,7 @@
 Name:		algArduino.ino
 Created:	5/24/2017 11:59:12 PM
 Author:	Matheus Rossetti & Rian Turibio
-*/
+*/	
 //Includes
 #include <EEPROM.h>
 //FUZZY
