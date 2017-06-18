@@ -19,7 +19,10 @@ Author:	Matheus Rossetti & Rian Turibio
 #include <stdlib.h>
 #include <math.h>
 
-
+//Definições de Funções e Variaveis Globais
+//DEFINIÇÃO FUZZY
+#define MAX_VEL 255																				//Velocidade Maxima
+#define MIN_VEL 10																				//Velocidade Minima
 #define ENTRADAS        2
 #define SAIDAS          1
 #define NR_AMOSTRAS     4
@@ -27,38 +30,10 @@ Author:	Matheus Rossetti & Rian Turibio
 #define EPOCAS          1000000
 #define TX_APRENDIZADO  0.7
 
-double cj_treinamento[NR_AMOSTRAS][ENTRADAS + SAIDAS] = { { 0, 0, 1 },							// FRENTE
-{ 0, 1, 2 },							// ESQUERDA			
-{ 1, 0, 3 },							// DIREITA
-{ 1, 1, 4 } };						// TRAS
-
-
-double	w_e_o[ENTRADAS + 1][NR_NEURON_O];
-double	w_o_s[NR_NEURON_O + 1][SAIDAS];
-double	saida_o[NR_NEURON_O];
-double	saida_s[SAIDAS];
-double	delta_saida[SAIDAS];
-double	gradiente_oculta[NR_NEURON_O];
-double	delta_oculta[NR_NEURON_O];
-//Cabeçalho das funções auxiliares
-int		callMLP(float Sensor_1, float Sensor_2);
-void	inicializa_sinapses();
-int		gera_nr_aleatorios();
-void	mostrar_sinapses();
-double	f_sigmoid(double net);
-void	calcular_saidas(double entradas[ENTRADAS]);
-void	treinar_RNA();
-double	calcular_erro(double desejado, double saida);
-void	calcular_delta_saida(double desejado);
-void	calcular_delta_oculta();
-void	calcular_gradiente_oculta();
-void	ajustar_pesos_sinapticos(double entradas[ENTRADAS]);
-
-
-
-//DEFINIÇÃO FUZZY
-#define MAX_VEL 255 //Velocidade Maxima
-#define MIN_VEL 10  //Velocidade Minima
+double cj_treinamento[NR_AMOSTRAS][ENTRADAS + SAIDAS] = {{ 0, 0, 1 },							// FRENTE
+														 { 0, 1, 2 },							// ESQUERDA			
+														 { 1, 0, 3 },							// DIREITA
+														 { 1, 1, 4 }};							// TRAS
 
 //Passo 1 - Instanciando um objeto da biblioteca
 Fuzzy* fuzzy = new Fuzzy();
@@ -78,13 +53,19 @@ const int Echo_2 = 2;																		//Sinal sensor 2
 //PINAGEM SELETOR
 const int selectPin_1 = 0;																	//Opção 1 seletor 
 const int selectPin_2 = 1;																	//Opção 2 seletor 
-
-
+//VARIAVEIS GLOBAIS MLP
+double	w_e_o[ENTRADAS + 1][NR_NEURON_O];
+double	w_o_s[NR_NEURON_O + 1][SAIDAS];
+double	saida_o[NR_NEURON_O];
+double	saida_s[SAIDAS];
+double	delta_saida[SAIDAS];
+double	gradiente_oculta[NR_NEURON_O];
+double	delta_oculta[NR_NEURON_O];
+//VARIAVEIS PINO SELETOR
 int selectState_1 = 0, selectState_2 = 0;
 
-
 //Movimentações
-void  movTras						()
+void   movTras						()
 {
 	digitalWrite(MOTOR_1_B, LOW);
 	digitalWrite(MOTOR_2_B, LOW);
@@ -92,7 +73,7 @@ void  movTras						()
 	analogWrite(MOTOR_1_B, MAX_VEL);
 	analogWrite(MOTOR_2_B, MAX_VEL);
 }
-void  movFrente						()
+void   movFrente					()
 {
 	digitalWrite(MOTOR_1_A, LOW);
 	digitalWrite(MOTOR_2_A, LOW);
@@ -100,7 +81,7 @@ void  movFrente						()
 	analogWrite(MOTOR_1_A, MAX_VEL);
 	analogWrite(MOTOR_2_A, MAX_VEL);
 }
-void  movDireita					()
+void   movDireita					()
 {
 	digitalWrite(MOTOR_1_A, LOW);
 	digitalWrite(MOTOR_2_A, LOW);
@@ -108,7 +89,7 @@ void  movDireita					()
 	analogWrite(MOTOR_1_A, 0);
 	analogWrite(MOTOR_2_A, MAX_VEL);
 }
-void  movEsquerda					()
+void   movEsquerda					()
 {
 	digitalWrite(MOTOR_1_A, LOW);
 	digitalWrite(MOTOR_2_A, LOW);
@@ -117,7 +98,7 @@ void  movEsquerda					()
 	analogWrite(MOTOR_2_A, 0);
 }
 //Suavização de Movimentos Curvos
-void  curvaEsquerda					()
+void   curvaEsquerda				()
 {
 	digitalWrite(MOTOR_1_A, LOW);
 	digitalWrite(MOTOR_2_A, LOW);
@@ -125,7 +106,7 @@ void  curvaEsquerda					()
 	analogWrite(MOTOR_1_A, MIN_VEL);
 	analogWrite(MOTOR_2_A, MAX_VEL);
 }
-void  curvaDireita					()
+void   curvaDireita					()
 {
 	digitalWrite(MOTOR_1_A, LOW);
 	digitalWrite(MOTOR_2_A, LOW);
@@ -134,7 +115,7 @@ void  curvaDireita					()
 	analogWrite(MOTOR_2_A, MIN_VEL);
 }
 //Leitura dos Sensores
-float lerSensor_1					()
+float  lerSensor_1					()
 {
 	float vlr_lido;																			//Cria Variavel para o valor lido pelo sensor
 	digitalWrite(Trigger_1, HIGH);															
@@ -144,7 +125,7 @@ float lerSensor_1					()
 
 	return (vlr_lido / 2 / 29.1);															//Em Cm.
 }
-float lerSensor_2					()
+float  lerSensor_2					()
 {
 	float vlr_lido;																			//Cria Variavel para o valor lido pelo sensor
 	digitalWrite(Trigger_2, HIGH);															
@@ -156,7 +137,7 @@ float lerSensor_2					()
 }
 
 //Implementação eFLL
-void  programa_1					()
+void   programa_1					()
 {
 	int Dist1, Dist2;
 
@@ -212,7 +193,7 @@ void  programa_1					()
 	delay(100);
 }
 //Implementação MLP
-void  programa_2					()
+void   programa_2					()
 {
 	int sentido = callMLP(lerSensor_1(), lerSensor_2());
 
@@ -234,7 +215,7 @@ void  programa_2					()
 	}
 }
 //Função principal
-int callMLP(float Sensor_1, float Sensor_2)
+int    callMLP						(float Sensor_1, float Sensor_2)
 {
 	int sentido;
 	//Entradas da Rna são binarias
@@ -268,7 +249,7 @@ int callMLP(float Sensor_1, float Sensor_2)
 	return sentido;
 }
 //MLP
-void inicializa_sinapses()
+void   inicializa_sinapses			()
 {
 	int i, j;
 
@@ -287,13 +268,13 @@ void inicializa_sinapses()
 		}
 	}
 }
-int gera_nr_aleatorios()
+int    gera_nr_aleatorios			()
 {
 	int numeros[2] = { -1, 1 };
 
 	return (numeros[rand() % 2]);
 }
-void mostrar_sinapses()
+void   mostrar_sinapses				()
 {
 	int i, j;
 	for (i = 0; i < ENTRADAS + 1; i++)
@@ -310,11 +291,11 @@ void mostrar_sinapses()
 		printf("\n");
 	}
 }
-double f_sigmoid(double net)
+double f_sigmoid					(double net)
 {
 	return 1 / (1 + exp(-net));
 }
-void calcular_saidas(double entradas[ENTRADAS])
+void   calcular_saidas				(double entradas[ENTRADAS])
 {
 	int i, j;
 
@@ -341,7 +322,7 @@ void calcular_saidas(double entradas[ENTRADAS])
 		saida_s[i] = f_sigmoid(saida_s[i]);
 	}
 }
-void treinar_RNA()
+void   treinar_RNA					()
 {
 	int i, j;
 	double entradas[ENTRADAS];
@@ -362,11 +343,11 @@ void treinar_RNA()
 		}
 	}
 }
-double calcular_erro(double desejado, double saida)
+double calcular_erro				(double desejado, double saida)
 {
 	return desejado - saida;
 }
-void calcular_delta_saida(double desejado)
+void   calcular_delta_saida			(double desejado)
 {
 	int i;
 	for (i = 0; i < SAIDAS; i++)
@@ -374,7 +355,7 @@ void calcular_delta_saida(double desejado)
 		delta_saida[i] = calcular_erro(desejado, saida_s[i]) * (1 - saida_s[i] * saida_s[i]);
 	}
 }
-void calcular_gradiente_oculta()
+void   calcular_gradiente_oculta	()
 {
 	int i, j;
 
@@ -385,7 +366,7 @@ void calcular_gradiente_oculta()
 		}
 	}
 }
-void calcular_delta_oculta()
+void   calcular_delta_oculta		()
 {
 	int i;
 	for (i = 0; i < NR_NEURON_O; i++)
@@ -393,7 +374,7 @@ void calcular_delta_oculta()
 		delta_oculta[i] = gradiente_oculta[i] * saida_o[i] * (1 - saida_o[i]);
 	}
 }
-void ajustar_pesos_sinapticos(double entradas[ENTRADAS])
+void   ajustar_pesos_sinapticos		(double entradas[ENTRADAS])
 {
 	int i, j;
 
@@ -421,17 +402,30 @@ void ajustar_pesos_sinapticos(double entradas[ENTRADAS])
 void setup							()
 {
 	Serial.begin(9600);
-	void  movTras();
-	void  movFrente();
-	void  movEsquerda();
-	void  movDireita();
-	void  curvaDireita();
-	void  curvaEsquerda();
-
-	float lerSensor_1();
-	float lerSensor_2();
-	void  programa_1();
-	void  programa_2();
+	//CABEÇALHO FUNÇÕES BASICAS
+	void  movTras						();
+	void  movFrente						();
+	void  movEsquerda					();
+	void  movDireita					();
+	void  curvaDireita					();
+	void  curvaEsquerda					();
+	float lerSensor_1					();
+	float lerSensor_2					();
+	void  programa_1					();
+	void  programa_2					();
+	//CABEÇALHO FUNÇÕES  AUXILIARES MLP
+	int		callMLP						(float Sensor_1, float Sensor_2);
+	void	inicializa_sinapses			();
+	int		gera_nr_aleatorios			();
+	void	mostrar_sinapses			();
+	double	f_sigmoid					(double net);
+	void	calcular_saidas				(double entradas[ENTRADAS]);
+	void	treinar_RNA					();
+	double	calcular_erro				(double desejado, double saida);
+	void	calcular_delta_saida		(double desejado);
+	void	calcular_delta_oculta		();
+	void	calcular_gradiente_oculta	();
+	void	ajustar_pesos_sinapticos	(double entradas[ENTRADAS]);
 
 	//Modos dos Pinos dos Motores
 	pinMode(MOTOR_1_A, OUTPUT);
