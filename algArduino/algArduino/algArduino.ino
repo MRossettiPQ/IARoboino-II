@@ -3,9 +3,9 @@ Name:		algArduino.ino
 Created:	5/24/2017 11:59:12 PM
 Author:	Matheus Rossetti & Rian Turibio
 */
-
 #include <EEPROM.h>
 #include "MLP.c"
+#include "MLP.h"
 #include <FuzzyRule.h>
 #include <FuzzyComposition.h>
 #include <Fuzzy.h>
@@ -173,7 +173,24 @@ void  programa_1					()
 //Implementação MLP
 void  programa_2					()
 {
-	callMLP(lerSensor_1(), lerSensor_2());
+	int sentido = callMLP(lerSensor_1(), lerSensor_2());
+
+	if (sentido == 0)
+	{
+		movFrente();
+	}
+	else if (sentido == 1)
+	{
+		movTras();
+	}
+	else if (sentido == 2)
+	{
+		movEsquerda();
+	}
+	else
+	{
+		movDireita();
+	}
 }
 //A funçãoo de configuraçãoo é executada uma vez quando você pressiona reset ou liga a placa
 void setup							()
@@ -333,12 +350,12 @@ void loop							()
 	if (selectState_1 == HIGH)																//Verificação do estado do pino seletor 1	
 	{
 		programa_1();																		//Chamada do programa de Logica Fuzzy
-		selectState_1 = 0;
+		selectState_1 = LOW;
 	}
 	else if (selectState_2 == HIGH)															//Verificação do estado do pino seletor 2
 	{
 		programa_2();																		//Chamada do programa de MLP
-		selectState_2 = 0;
+		selectState_2 = LOW;
 	}
 	else
 	{

@@ -11,10 +11,10 @@
 #define EPOCAS          1000000
 #define TX_APRENDIZADO  0.7
 
-double cj_treinamento[NR_AMOSTRAS][ENTRADAS + SAIDAS] ={{ 0, 0 },							// FRENTE
-														{ 0, 1 },							// ESQUERDA			
-														{ 1, 0 },							// DIREITA
-														{ 1, 1 }};							// TRAS
+double cj_treinamento[NR_AMOSTRAS][ENTRADAS + SAIDAS] ={{ 0, 0, 1},							// FRENTE
+														{ 0, 1, 2},							// ESQUERDA			
+														{ 1, 0, 3},							// DIREITA
+														{ 1, 1, 4}};						// TRAS
 
 
 double	w_e_o			[ENTRADAS    + 1][NR_NEURON_O];
@@ -39,73 +39,38 @@ void	calcular_delta_oculta		();
 void	calcular_gradiente_oculta	();
 void	ajustar_pesos_sinapticos	(double entradas[ENTRADAS]);
 
-main()
-{
-
-	return 0;
-}
 //Função principal
 int callMLP(float Sensor_1, float Sensor_2)
 {
-	int mov, r, k;
 	int sentido;
 	//Entradas da Rna são binarias
 	double	entradas[ENTRADAS];
 
-	for (mov = 1; mov == 1000; mov++)/*FOR para simular os recebimentos dos sensores*/
-	{
+	entradas[0] = Sensor_1;
+	entradas[1] = Sensor_2;
+	
+	inicializa_sinapses();
+	treinar_RNA();
+	calcular_saidas(entradas);
 
-		for (r = 1; r == 10; r++)/*FOR para andar inicialmente RETO*/
-		{
-			entradas[0] = 0;
-			entradas[1] = 0;
 
-		}
-		for (k = 1; k > 1000; k++) /*FOR para randomizar posições do sensor*/
-		{
-
-			if (entradas[0] == 1)
-			{
-				entradas[1] = 0;
-			}
-			else if (entradas[0] == 0)
-			{
-				entradas[1] = 1;
-			}
-			else if (entradas[1] == 0)
-			{
-				entradas[0] = 1;
-			}
-			else if (entradas[1] == 1)
-			{
-				entradas[0] = 0;
-			}
-			inicializa_sinapses();
-			treinar_RNA();
-			calcular_saidas(entradas);
-		}
-	}
-
-	if		((saida_s[] == 1) && (saida_s[] == 1))
+	if ((saida_s[0] == 1) && (saida_s[1] == 0) && (saida_s[2] == 1) && (saida_s[3] == 0))		//Frente
 	{
 		sentido = 0;
 	}
-	else if ((saida_s[] == 1) && (saida_s[] == 1))
+	else if ((saida_s[0] == 0) && (saida_s[1] == 1) && (saida_s[2] == 0) && (saida_s[3] == 1))	//Tras
 	{
 		sentido = 1;
 	}
-	else if ((saida_s[] == 1) && (saida_s[] == 1))
+	else if ((saida_s[0] == 0) && (saida_s[1] == 0) && (saida_s[2] == 1) && (saida_s[3] == 0))	//Esquerda
 	{
 		sentido = 2;
 	}
-	else if ((saida_s[] == 1) && (saida_s[] == 1))
+	else if ((saida_s[0] == 1) && (saida_s[1] == 0) && (saida_s[2] == 0) && (saida_s[3] == 0))	//Direita
 	{
 		sentido = 3;
 	}
-	else if ((saida_s[] == 1) && (saida_s[] == 1))
-	{
-		sentido = 4;
-	}
+
 	return sentido;
 }
 //
@@ -139,16 +104,15 @@ int gera_nr_aleatorios				()
 void mostrar_sinapses				()
 {
 	int i, j;
-
-
-	for (i = 0; i < ENTRADAS + 1; i++) {
+	for (i = 0; i < ENTRADAS + 1; i++) 
+	{
 		for (j = 0; j < NR_NEURON_O; j++)
 			printf("%lf ", w_e_o[i][j]);
 		printf("\n");
 	}
 
-
-	for (i = 0; i < NR_NEURON_O + 1; i++) {
+	for (i = 0; i < NR_NEURON_O + 1; i++) 
+	{
 		for (j = 0; j < SAIDAS; j++)
 			printf("%lf ", w_o_s[i][j]);
 		printf("\n");
@@ -164,14 +128,14 @@ void calcular_saidas				(double entradas[ENTRADAS])
 {
 	int i, j;
 
-
 	for (i = 0; i < NR_NEURON_O; i++) {
 		saida_o[i] = 0.0;
 		saida_o[i] += w_e_o[0][i] * 1;
 
 		for (j = 1; j < ENTRADAS + 1; j++)
+		{
 			saida_o[i] += w_e_o[j][i] * entradas[j - 1];
-
+		}
 		saida_o[i] = f_sigmoid(saida_o[i]);
 	}
 
@@ -180,7 +144,9 @@ void calcular_saidas				(double entradas[ENTRADAS])
 		saida_s[i] += w_o_s[0][i] * 1;
 
 		for (j = 1; j < NR_NEURON_O + 1; j++)
+		{
 			saida_s[i] += w_o_s[j][i] * saida_o[j - 1];
+		}
 
 		saida_s[i] = f_sigmoid(saida_s[i]);
 	}
@@ -192,28 +158,19 @@ void treinar_RNA					()
 	double entradas[ENTRADAS];
 	double media_erro = 0.0;
 
-	for (i = 1; i <= EPOCAS; i++) {
-
-		for (j = 0; j < NR_AMOSTRAS; j++) {
+	for (i = 1; i <= EPOCAS; i++) 
+	{
+		for (j = 0; j < NR_AMOSTRAS; j++) 
+		{
 			entradas[0] = cj_treinamento[j][0];
 			entradas[1] = cj_treinamento[j][1];
-			entradas[2] = cj_treinamento[j][2];
-			entradas[3] = cj_treinamento[j][3];
-			entradas[4] = cj_treinamento[j][4];
-			entradas[5] = cj_treinamento[j][5];
-
 			calcular_saidas(entradas);
-
 			calcular_delta_saida(cj_treinamento[j][6] / 100);
-
 			calcular_gradiente_oculta();
 			calcular_delta_oculta();
 			ajustar_pesos_sinapticos(entradas);
 		}
-
 	}
-
-	printf("RNA TREINADA - Media dos erros: %lf\n", media_erro);
 }
 //
 double calcular_erro				(double desejado, double saida)
