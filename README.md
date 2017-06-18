@@ -1,4 +1,4 @@
-# TRABALHOS DE IMPLEMENTAÇÃO I Logica Fuzzy e II Multilayer-Perceptron
+# TRABALHOS DE IMPLEMENTAÇÃO I Logica Fuzzy e II Multilayer Perceptron
 
 Desenvolver um sistema de controle para um robô móvel usando Lógica Fuzzy e Redes Neurais Artificiais. O objetivo é fazer com que o robô navegue em um ambiente desconhecido evitando se chocar com obstáculos.
 
