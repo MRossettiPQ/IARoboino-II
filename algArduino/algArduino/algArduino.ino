@@ -63,7 +63,7 @@ double	delta_saida[SAIDAS];
 double	gradiente_oculta[NR_NEURON_O];
 double	delta_oculta[NR_NEURON_O];
 //VARIAVEIS PINO SELETOR
-int selectState_1 = 0, selectState_2 = 0;
+int selectState_1 = LOW, selectState_2 = LOW;
 
 //Funções Basicas
 
