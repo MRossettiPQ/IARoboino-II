@@ -5,15 +5,16 @@
 #include <time.h>
 
 #define ENTRADAS        2
-#define SAIDAS          2
-#define NR_AMOSTRAS     1
+#define SAIDAS          4
+#define NR_AMOSTRAS     4
 #define NR_NEURON_O     6
 #define EPOCAS          1000000
 #define TX_APRENDIZADO  0.7
 
-
-float cj_treinamento[NR_AMOSTRAS][ENTRADAS + SAIDAS] = {{ 1, 2/* NÃO TA DANDO CERTO OQ FOI COLOCADO */ },
-														{ 2, 2/* NÃO TA DANDO CERTO OQ FOI COLOCADO */ }};
+double cj_treinamento[NR_AMOSTRAS][ENTRADAS + SAIDAS] ={{ 0, 0 },							// FRENTE
+														{ 0, 1 },							// ESQUERDA			
+														{ 1, 0 },							// DIREITA
+														{ 1, 1 }};							// TRAS
 
 
 double	w_e_o			[ENTRADAS    + 1][NR_NEURON_O];
@@ -25,7 +26,7 @@ double	gradiente_oculta[NR_NEURON_O];
 double	delta_oculta	[NR_NEURON_O];
 
 //Cabeçalho das funções auxiliares
-void	callMLP						(double Sensor_1, double Sensor_2);
+int		callMLP						(float Sensor_1, float Sensor_2);
 void	inicializa_sinapses			();
 int		gera_nr_aleatorios			();
 void	mostrar_sinapses			();
@@ -38,43 +39,74 @@ void	calcular_delta_oculta		();
 void	calcular_gradiente_oculta	();
 void	ajustar_pesos_sinapticos	(double entradas[ENTRADAS]);
 
-//Função principal
-int main()
+main()
 {
-	srand(time(NULL));
+
 	return 0;
 }
-//
-void callMLP(double Sensor_1, double Sensor_2)
+//Função principal
+int callMLP(float Sensor_1, float Sensor_2)
 {
+	int mov, r, k;
+	int sentido;
 	//Entradas da Rna são binarias
-	int		opcao;
 	double	entradas[ENTRADAS];
 
-	inicializa_sinapses();
-	treinar_RNA();
+	for (mov = 1; mov == 1000; mov++)/*FOR para simular os recebimentos dos sensores*/
+	{
 
+		for (r = 1; r == 10; r++)/*FOR para andar inicialmente RETO*/
+		{
+			entradas[0] = 0;
+			entradas[1] = 0;
 
-	/*SUBSTITUIR ESSA ENTRADA DECLARADA PELO USUARIO*/
-	/*SUBSTITUIR ESSA ENTRADA DECLARADA PELO USUARIO*/
-	/*SUBSTITUIR ESSA ENTRADA DECLARADA PELO USUARIO*/
-	/*SUBSTITUIR ESSA ENTRADA DECLARADA PELO USUARIO*/
-	/*SUBSTITUIR ESSA ENTRADA DECLARADA PELO USUARIO*/
-	/*VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV*/
-	printf("Entrada 1: ");
-	scanf("%lf", &entradas[0]);
-	printf("Entrada 2: ");
-	scanf("%lf", &entradas[1]);
-	printf("Entrada 3: ");
-	scanf("%lf", &entradas[2]);
-	printf("Entrada 4: ");
-	scanf("%lf", &entradas[3]);
-	printf("Entrada 5: ");
-	scanf("%lf", &entradas[4]);
-	printf("Entrada 6: ");
-	scanf("%lf", &entradas[5]);
+		}
+		for (k = 1; k > 1000; k++) /*FOR para randomizar posições do sensor*/
+		{
 
-	calcular_saidas(entradas);
+			if (entradas[0] == 1)
+			{
+				entradas[1] = 0;
+			}
+			else if (entradas[0] == 0)
+			{
+				entradas[1] = 1;
+			}
+			else if (entradas[1] == 0)
+			{
+				entradas[0] = 1;
+			}
+			else if (entradas[1] == 1)
+			{
+				entradas[0] = 0;
+			}
+			inicializa_sinapses();
+			treinar_RNA();
+			calcular_saidas(entradas);
+		}
+	}
+
+	if		((saida_s[] == 1) && (saida_s[] == 1))
+	{
+		sentido = 0;
+	}
+	else if ((saida_s[] == 1) && (saida_s[] == 1))
+	{
+		sentido = 1;
+	}
+	else if ((saida_s[] == 1) && (saida_s[] == 1))
+	{
+		sentido = 2;
+	}
+	else if ((saida_s[] == 1) && (saida_s[] == 1))
+	{
+		sentido = 3;
+	}
+	else if ((saida_s[] == 1) && (saida_s[] == 1))
+	{
+		sentido = 4;
+	}
+	return sentido;
 }
 //
 void inicializa_sinapses			()
@@ -152,7 +184,6 @@ void calcular_saidas				(double entradas[ENTRADAS])
 
 		saida_s[i] = f_sigmoid(saida_s[i]);
 	}
-
 }
 //
 void treinar_RNA					()

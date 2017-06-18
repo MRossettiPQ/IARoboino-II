@@ -16,6 +16,7 @@ Author:	Matheus Rossetti & Rian Turibio
 #include <FuzzySet.h>
 #include <FuzzyRuleAntecedent.h>
 
+
 #define MAX_VEL 255 //Velocidade Maxima
 #define MIN_VEL 10  //Velocidade Minima
 
@@ -216,9 +217,9 @@ void setup							()
 										//Passo 2 - Criando o FuzzyInput distancia
 	FuzzyInput* distancia = new FuzzyInput(1);												// Como parametro seu ID
 																							// Criando os FuzzySet que compoem o FuzzyInput distancia
-	FuzzySet* proximo = new FuzzySet(2, 5, 5, 8);											// Distancia pequena
+	FuzzySet*  proximo = new FuzzySet(2, 5, 5, 8);											// Distancia pequena
 		distancia->addFuzzySet(proximo);													// Adicionando o FuzzySet proximo em distance
-	FuzzySet* seguro = new FuzzySet(10, 13, 13, 17);										// Distancia segura
+	FuzzySet*   seguro = new FuzzySet(10, 13, 13, 17);										// Distancia segura
 		distancia->addFuzzySet(seguro);														// Adicionando o FuzzySet seguro em distance
 	FuzzySet* distante = new FuzzySet(15, 21, 21, 24);										// Distancia grande
 		distancia->addFuzzySet(distante);													// Adicionando o FuzzySet distante em distance
@@ -321,19 +322,20 @@ void setup							()
 	FuzzyRule* fuzzyRule09 = new FuzzyRule(9, ifLongeD_LongeE, thenVReto2);					// Passando o Antecedente e o Consequente da expressao
 		fuzzy->addFuzzyRule(fuzzyRule09);													// Adicionando o FuzzyRule ao objeto Fuzzy
 }
+
 //A função de loop é executada repetidamente até que a alimentação seja desligada ou reinicializada
-void loop							() 
+void loop							()
 {
 	selectState_1 = digitalRead(selectPin_1);												//Leitura estado pino seletor 1
 	selectState_2 = digitalRead(selectPin_2);												//Leitura estado pino seletor 2
 
 	// Menu de seleção do programa de IA a ser rodado
-	if(selectState_1 == HIGH)																//Verificação do estado do pino seletor 1	
+	if (selectState_1 == HIGH)																//Verificação do estado do pino seletor 1	
 	{
 		programa_1();																		//Chamada do programa de Logica Fuzzy
 		selectState_1 = 0;
 	}
-	else if(selectState_2 == HIGH)															//Verificação do estado do pino seletor 2
+	else if (selectState_2 == HIGH)															//Verificação do estado do pino seletor 2
 	{
 		programa_2();																		//Chamada do programa de MLP
 		selectState_2 = 0;
