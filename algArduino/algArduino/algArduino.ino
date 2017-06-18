@@ -66,6 +66,7 @@ double	delta_oculta[NR_NEURON_O];
 int selectState_1 = 0, selectState_2 = 0;
 
 //Funções Basicas
+
 //Movimentações
 void   movTras						()
 {
@@ -226,6 +227,7 @@ void   programa_2					()
 	}
 }
 //MLP
+
 void   inicializa_sinapses			()
 {
 	int i, j;
