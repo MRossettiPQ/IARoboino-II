@@ -82,11 +82,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="MLP.h" />
     <ClInclude Include="__vm\.algArduino.vsarduino.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="MLP.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
