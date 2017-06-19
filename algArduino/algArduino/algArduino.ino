@@ -28,7 +28,7 @@ Author:	Matheus Rossetti & Rian Turibio
 #define SAIDAS          1
 #define NR_AMOSTRAS     4
 #define NR_NEURON_O     6
-#define EPOCAS          10
+#define EPOCAS          100
 #define TX_APRENDIZADO  0.7
 
 double cj_treinamento[NR_AMOSTRAS][ENTRADAS + SAIDAS] = {{ 0, 0, 1 },							// FRENTE
@@ -74,13 +74,13 @@ void   movParado()
 	digitalWrite(MOTOR_2_A, LOW);
 	digitalWrite(MOTOR_1_B, LOW);
 	digitalWrite(MOTOR_2_B, LOW);
-	delay(50);
+	delay(100);
 }
 void   movTras						()
 {
 	digitalWrite(MOTOR_1_B, LOW);
 	digitalWrite(MOTOR_2_B, LOW);
-	delay(50);
+	delay(500);
 	analogWrite(MOTOR_1_B, MAX_VEL);
 	analogWrite(MOTOR_2_B, MAX_VEL);
 }
@@ -88,7 +88,7 @@ void   movFrente					()
 {
 	digitalWrite(MOTOR_1_A, LOW);
 	digitalWrite(MOTOR_2_A, LOW);
-	delay(50);
+	delay(500);
 	analogWrite(MOTOR_1_A, MAX_VEL);
 	analogWrite(MOTOR_2_A, MAX_VEL);
 }
@@ -96,7 +96,7 @@ void   movDireita					()
 {
 	digitalWrite(MOTOR_1_A, LOW);
 	digitalWrite(MOTOR_2_A, LOW);
-	delay(50);
+	delay(500);
 	analogWrite(MOTOR_1_A, 0);
 	analogWrite(MOTOR_2_A, MAX_VEL);
 }
@@ -104,7 +104,7 @@ void   movEsquerda					()
 {
 	digitalWrite(MOTOR_1_A, LOW);
 	digitalWrite(MOTOR_2_A, LOW);
-	delay(50);
+	delay(500);
 	analogWrite(MOTOR_1_A, MAX_VEL);
 	analogWrite(MOTOR_2_A, 0);
 }
@@ -113,7 +113,7 @@ void   curvaEsquerda				()
 {
 	digitalWrite(MOTOR_1_A, LOW);
 	digitalWrite(MOTOR_2_A, LOW);
-	delay(50);
+	delay(500);
 	analogWrite(MOTOR_1_A, MIN_VEL);
 	analogWrite(MOTOR_2_A, MAX_VEL);
 }
@@ -121,7 +121,7 @@ void   curvaDireita					()
 {
 	digitalWrite(MOTOR_1_A, LOW);
 	digitalWrite(MOTOR_2_A, LOW);
-	delay(50);
+	delay(500);
 	analogWrite(MOTOR_1_A, MAX_VEL);
 	analogWrite(MOTOR_2_A, MIN_VEL);
 }
@@ -209,46 +209,71 @@ void   programa_2					()
 	int z;
 	//Entradas da Rna são binarias
 	double	entradas[ENTRADAS];
-
-	entradas[0] = lerSensor_1();
-	entradas[1] = lerSensor_2();
+	Serial.println("SENSOR 1 : ");
+	Serial.print(lerSensor_1());
+	Serial.println("   ");
+	Serial.println("SENSOR 2 : ");
+	Serial.print(lerSensor_1());
+	Serial.println("   ");
+	if		(((lerSensor_1() > 30) && (lerSensor_1() <= 400))  && ((lerSensor_2() > 30) && (lerSensor_2() <= 400))) //
+	{
+		entradas[0] = 0;
+		entradas[1] = 0;
+	}
+	else if ((lerSensor_1() > 30) && (lerSensor_2() < 30))
+	{
+		entradas[0] = 0;
+		entradas[1] = 1;
+	}
+	else if ((lerSensor_1() < 30) && (lerSensor_2() > 30))
+	{
+		entradas[0] = 1;
+		entradas[1] = 0;
+	}
+	else if ((lerSensor_1() < 30) && (lerSensor_2() < 30))
+	{
+		entradas[0] = 1;
+		entradas[1] = 1;
+	}
 
 	inicializa_sinapses();
-	for (z = 0; z < 5; z++)
-	{
-		treinar_RNA();
-	}
+	treinar_RNA();
 	calcular_saidas(entradas);
 
-	Serial.println("TESTE");
-
-	Serial.println(saida_s[0]);
-	Serial.println(saida_s[0]*100);
-
-	if		((saida_s[0] * 100) == 1)	//Frente
+	if ((saida_s[0] * 100) <= 1.1)																//Frente
 	{
-		Serial.print("FRENTE");
+		Serial.println("FRENTE");
+		Serial.println(saida_s[0] * 100);
 		movFrente();
 		delay(50);
 	}
-	else if ((saida_s[0] * 100) == 2)	//Tras
+	else if (((saida_s[0] * 100) > 1.1) && ((saida_s[0] * 1000) <= 2.1))						//Tras
 	{
-		Serial.print("TRAS");
+		Serial.println("TRAS");
+		Serial.println(saida_s[0] * 100);
 		movTras();
 		delay(50);
 	}
-	else if ((saida_s[0] * 100) == 3)	//Esquerda
+	else if (((saida_s[0] * 100) > 2.1) && ((saida_s[0] * 1000) <= 3.1))						//Esquerda
 	{
-		Serial.print("ESQUERDA");
+		Serial.println("ESQUERDA");
+		Serial.println(saida_s[0] * 100);
+		movTras();
+		delay(50);
 		movEsquerda();
 		delay(50);
 	}
-	else if ((saida_s[0] * 100) == 4)	//Direita
+	else																						//Direita
 	{
-		Serial.print("DIREITA");
+		Serial.println("DIREITA");
+		Serial.println(saida_s[0] * 100);
+		movTras();
+		delay(50);
 		movDireita();
 		delay(50);
 	}
+	Serial.println("   ");
+	Serial.println("   ");
 }
 //MLP
 
@@ -580,6 +605,6 @@ void loop							()
 	{
 		Serial.print("NÃO QUERO ANDAR NÃO");
 	}
-	delay(100);
+	delay(1);
 	movParado();
 }

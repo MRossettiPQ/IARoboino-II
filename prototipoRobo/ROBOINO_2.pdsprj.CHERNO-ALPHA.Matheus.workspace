@@ -223,7 +223,7 @@
    <POPUP w="14" x="148" flags="00000008" y="209" h="18" pid="7" iid="3">
     <PROPERTIES/>
    </POPUP>
-   <POPUP w="8" x="168" flags="80000002" y="229" h="8" pid="8" iid="3">
+   <POPUP w="8" x="168" flags="00000002" y="229" h="8" pid="8" iid="3">
     <PROPERTIES>
      <ITEM name="DataType">2</ITEM>
      <ITEM name="DispChars">Yes</ITEM>
@@ -269,7 +269,7 @@
    <POPUP w="14" x="268" flags="00000008" y="329" h="18" pid="7" iid="4">
     <PROPERTIES/>
    </POPUP>
-   <POPUP w="8" x="288" flags="80000002" y="349" h="8" pid="8" iid="4">
+   <POPUP w="8" x="288" flags="00000002" y="349" h="8" pid="8" iid="4">
     <PROPERTIES>
      <ITEM name="DataType">2</ITEM>
      <ITEM name="DispChars">Yes</ITEM>
@@ -312,7 +312,7 @@
      <ITEM name="TopLineAddress">00000000</ITEM>
     </PROPERTIES>
    </POPUP>
-   <POPUP w="16" x="388" flags="80000000" y="449" h="32" pid="14" iid="10">
+   <POPUP w="16" x="388" flags="00000000" y="449" h="32" pid="14" iid="10">
     <PROPERTIES>
      <ITEM name="DataType">2</ITEM>
      <ITEM name="DispChars">Yes</ITEM>
@@ -340,6 +340,12 @@
      <ITEM name="ShowChanges">Yes</ITEM>
      <ITEM name="ShowToolTips">Yes</ITEM>
      <ITEM name="TopLineAddress">00000020</ITEM>
+    </PROPERTIES>
+   </POPUP>
+   <POPUP w="450" x="98" flags="00000022" y="395" h="250" pid="0" iid="10">
+    <PROPERTIES>
+     <ITEM name="AutoEcho">0</ITEM>
+     <ITEM name="HexMode">0</ITEM>
     </PROPERTIES>
    </POPUP>
   </PWI>
