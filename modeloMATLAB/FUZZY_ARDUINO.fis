@@ -1,0 +1,60 @@
+[System]
+Name='FUZZY_ARDUINO'
+Type='mamdani'
+Version=2.0
+NumInputs=2
+NumOutputs=2
+NumRules=10
+AndMethod='min'
+OrMethod='max'
+ImpMethod='min'
+AggMethod='max'
+DefuzzMethod='centroid'
+
+[Input1]
+Name='Distancia'
+Range=[1 50]
+NumMFs=4
+MF1='longe':'trimf',[24 35 50]
+MF2='proximo':'trimf',[9 15 25]
+MF3='muito_prox':'trimf',[0 5 10]
+MF4='parado':'trimf',[0 0 0]
+
+[Input2]
+Name='Velocidade'
+Range=[0 10]
+NumMFs=4
+MF1='Parado':'trimf',[0 0 0]
+MF2='lento':'trimf',[0.1 1 3]
+MF3='medio':'trimf',[2.9 5 7]
+MF4='Rapido':'trimf',[6.9 8.5 10.1]
+
+[Output1]
+Name='Motor-ESQ'
+Range=[0 100]
+NumMFs=4
+MF1='parado':'trimf',[0 0 0]
+MF2='Rapido':'trimf',[69 85 101]
+MF3='medio':'trimf',[29 50 70]
+MF4='Lento':'trimf',[1 20 30]
+
+[Output2]
+Name='Motor-DIR'
+Range=[0 100]
+NumMFs=4
+MF1='Medio':'trimf',[29 50 70]
+MF2='Parado':'trimf',[0 0 0]
+MF3='Lento':'trimf',[1 20 30]
+MF4='Rapido':'trimf',[69 85 101]
+
+[Rules]
+4 1, 1 2 (1) : 1
+3 2, 4 3 (1) : 1
+3 3, 4 3 (1) : 1
+3 4, 1 2 (1) : 1
+2 2, 3 1 (1) : 1
+2 3, 3 1 (1) : 1
+2 4, 4 3 (1) : 1
+1 2, 2 4 (1) : 1
+1 3, 2 4 (1) : 1
+1 4, 2 4 (1) : 1
