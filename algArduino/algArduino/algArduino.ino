@@ -31,10 +31,10 @@ Author:	Matheus Rossetti & Rian Turibio
 #define EPOCAS          10
 #define TX_APRENDIZADO  0.7
 
-double cj_treinamento[NR_AMOSTRAS][ENTRADAS + SAIDAS] = {{ 0, 0, 0 },							// FRENTE
-														 { 0, 1, 1 },							// ESQUERDA			
-														 { 1, 0, 2 },							// DIREITA
-														 { 1, 1, 3 }};							// TRAS
+double cj_treinamento[NR_AMOSTRAS][ENTRADAS + SAIDAS] = {{ 0, 0, 1 },							// FRENTE
+														 { 0, 1, 2 },							// ESQUERDA			
+														 { 1, 0, 3 },							// DIREITA
+														 { 1, 1, 4 }};							// TRAS
 
 //Passo 1 - Instanciando um objeto da biblioteca
 Fuzzy* fuzzy = new Fuzzy();
@@ -206,6 +206,7 @@ void   programa_1					()
 //Implementação MLP
 void   programa_2					()
 {
+	int z;
 	//Entradas da Rna são binarias
 	double	entradas[ENTRADAS];
 
@@ -213,28 +214,38 @@ void   programa_2					()
 	entradas[1] = lerSensor_2();
 
 	inicializa_sinapses();
-	treinar_RNA();
+	for (z = 0; z < 5; z++)
+	{
+		treinar_RNA();
+	}
 	calcular_saidas(entradas);
 
-	if		((saida_s[0] == 1) && (saida_s[1] == 0) && (saida_s[2] == 1) && (saida_s[3] == 0))	//Frente
+	Serial.println("TESTE");
+
+	Serial.println(saida_s[0]);
+	Serial.println(saida_s[0]*100);
+
+	if		((saida_s[0] * 100) == 1)	//Frente
 	{
+		Serial.print("FRENTE");
 		movFrente();
 		delay(50);
-
-
 	}
-	else if ((saida_s[0] == 0) && (saida_s[1] == 1) && (saida_s[2] == 0) && (saida_s[3] == 1))	//Tras
+	else if ((saida_s[0] * 100) == 2)	//Tras
 	{
+		Serial.print("TRAS");
 		movTras();
 		delay(50);
 	}
-	else if ((saida_s[0] == 0) && (saida_s[1] == 0) && (saida_s[2] == 1) && (saida_s[3] == 0))	//Esquerda
+	else if ((saida_s[0] * 100) == 3)	//Esquerda
 	{
+		Serial.print("ESQUERDA");
 		movEsquerda();
 		delay(50);
 	}
-	else if ((saida_s[0] == 1) && (saida_s[1] == 0) && (saida_s[2] == 0) && (saida_s[3] == 0))	//Direita
+	else if ((saida_s[0] * 100) == 4)	//Direita
 	{
+		Serial.print("DIREITA");
 		movDireita();
 		delay(50);
 	}
@@ -327,7 +338,6 @@ void   treinar_RNA					()
 			entradas[0] = cj_treinamento[j][0];
 			entradas[1] = cj_treinamento[j][1];
 			calcular_saidas(entradas);
-			calcular_delta_saida(cj_treinamento[j][0] / 100);
 			calcular_delta_saida(cj_treinamento[j][1] / 100);
 			calcular_gradiente_oculta();
 			calcular_delta_oculta();
