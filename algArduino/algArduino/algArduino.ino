@@ -220,6 +220,8 @@ void   programa_2					()
 	{
 		movFrente();
 		delay(50);
+
+
 	}
 	else if ((saida_s[0] == 0) && (saida_s[1] == 1) && (saida_s[2] == 0) && (saida_s[3] == 1))	//Tras
 	{
