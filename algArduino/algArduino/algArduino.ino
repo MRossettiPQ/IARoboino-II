@@ -28,13 +28,13 @@ Author:	Matheus Rossetti & Rian Turibio
 #define SAIDAS          1
 #define NR_AMOSTRAS     4
 #define NR_NEURON_O     6
-#define EPOCAS          1000000
+#define EPOCAS          10
 #define TX_APRENDIZADO  0.7
 
-double cj_treinamento[NR_AMOSTRAS][ENTRADAS + SAIDAS] = {{ 0, 0, 1 },							// FRENTE
-														 { 0, 1, 2 },							// ESQUERDA			
-														 { 1, 0, 3 },							// DIREITA
-														 { 1, 1, 4 }};							// TRAS
+double cj_treinamento[NR_AMOSTRAS][ENTRADAS + SAIDAS] = {{ 0, 0, 0 },							// FRENTE
+														 { 0, 1, 1 },							// ESQUERDA			
+														 { 1, 0, 2 },							// DIREITA
+														 { 1, 1, 3 }};							// TRAS
 
 //Passo 1 - Instanciando um objeto da biblioteca
 Fuzzy* fuzzy = new Fuzzy();
@@ -68,6 +68,14 @@ int selectState_1 = LOW, selectState_2 = LOW;
 //Funções Basicas
 
 //Movimentações
+void   movParado()
+{
+	digitalWrite(MOTOR_1_A, LOW);
+	digitalWrite(MOTOR_2_A, LOW);
+	digitalWrite(MOTOR_1_B, LOW);
+	digitalWrite(MOTOR_2_B, LOW);
+	delay(50);
+}
 void   movTras						()
 {
 	digitalWrite(MOTOR_1_B, LOW);
@@ -208,22 +216,25 @@ void   programa_2					()
 	treinar_RNA();
 	calcular_saidas(entradas);
 
-
-	if ((saida_s[0] == 1) && (saida_s[1] == 0) && (saida_s[2] == 1) && (saida_s[3] == 0))		//Frente
+	if		((saida_s[0] == 1) && (saida_s[1] == 0) && (saida_s[2] == 1) && (saida_s[3] == 0))	//Frente
 	{
 		movFrente();
+		delay(50);
 	}
 	else if ((saida_s[0] == 0) && (saida_s[1] == 1) && (saida_s[2] == 0) && (saida_s[3] == 1))	//Tras
 	{
 		movTras();
+		delay(50);
 	}
 	else if ((saida_s[0] == 0) && (saida_s[1] == 0) && (saida_s[2] == 1) && (saida_s[3] == 0))	//Esquerda
 	{
 		movEsquerda();
+		delay(50);
 	}
 	else if ((saida_s[0] == 1) && (saida_s[1] == 0) && (saida_s[2] == 0) && (saida_s[3] == 0))	//Direita
 	{
 		movDireita();
+		delay(50);
 	}
 }
 //MLP
@@ -557,4 +568,6 @@ void loop							()
 	{
 		Serial.print("NÃO QUERO ANDAR NÃO");
 	}
+	delay(100);
+	movParado();
 }
